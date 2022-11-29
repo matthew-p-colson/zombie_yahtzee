@@ -15,6 +15,17 @@ class NumberLogic {
     }
   }
 
+  static getNumber({
+    required int number,
+    required NumberColor numberColor,
+    required double imageHeight,
+  }) {
+    return Image.asset(
+      numberImages[number][numberColor],
+      height: imageHeight,
+    );
+  }
+
   static getNumbers({
     required int numbers,
     required NumberColor numberColor,
