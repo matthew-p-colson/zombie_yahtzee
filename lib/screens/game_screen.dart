@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:zombie_yahtzee/logic/dice_logic.dart';
+import 'package:zombie_yahtzee/logic/high_score_logic.dart';
 import 'package:zombie_yahtzee/logic/letter_logic.dart';
 import 'package:zombie_yahtzee/logic/number_logic.dart';
 import 'package:zombie_yahtzee/logic/scorecard_logic.dart';
@@ -353,31 +354,7 @@ class _GameScreenState extends State<GameScreen> {
       children: [
         TextButton(
           onPressed: () {
-            setState(() {
-              ScorecardLogic.getScore(cardNumber);
-              ScorecardLogic.updateBonus();
-              if (ZombieLogic.tooManyZombies()) {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, '/zombie', (route) => false);
-              }
-              scorecardImages[cardNumber] =
-                  ScorecardLogic.getScorecardImage(cardNumber);
-              scorecardValues[cardNumber] =
-                  ScorecardLogic.getScorecardValue(cardNumber);
-              scorecardValueColors[cardNumber] =
-                  ScorecardLogic.getScorecardValueColor(cardNumber);
-              scorecardImages[6] = ScorecardLogic.getScorecardImage(6);
-              scorecardValues[6] = ScorecardLogic.getScorecardValue(6);
-              scorecardValueColors[6] =
-                  ScorecardLogic.getScorecardValueColor(6);
-              ScorecardLogic.updateTotals();
-              zombieCountImage = ZombieLogic.getZombieCountImage();
-              grandTotal = ScorecardLogic.getGrandTotal();
-              upperTotal = ScorecardLogic.getUpperTotal();
-              DiceLogic.resetDice();
-              diceImages = List.from(DiceLogic.getDiceImages());
-              rollCountImage = DiceLogic.getRollCountImage();
-            });
+            buildScorecardSetState(cardNumber);
           },
           style: TextButton.styleFrom(
             padding: EdgeInsets.zero,
@@ -416,27 +393,7 @@ class _GameScreenState extends State<GameScreen> {
         ),
         TextButton(
           onPressed: () {
-            setState(() {
-              ScorecardLogic.getScore(cardNumber);
-              ScorecardLogic.updateBonus();
-              if (ZombieLogic.tooManyZombies()) {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, '/zombie', (route) => false);
-              }
-              scorecardImages[cardNumber] =
-                  ScorecardLogic.getScorecardImage(cardNumber);
-              scorecardValues[cardNumber] =
-                  ScorecardLogic.getScorecardValue(cardNumber);
-              scorecardValueColors[cardNumber] =
-                  ScorecardLogic.getScorecardValueColor(cardNumber);
-              ScorecardLogic.updateTotals();
-              zombieCountImage = ZombieLogic.getZombieCountImage();
-              grandTotal = ScorecardLogic.getGrandTotal();
-              lowerTotal = ScorecardLogic.getLowerTotal();
-              DiceLogic.resetDice();
-              diceImages = List.from(DiceLogic.getDiceImages());
-              rollCountImage = DiceLogic.getRollCountImage();
-            });
+            buildScorecardSetState(cardNumber);
           },
           style: TextButton.styleFrom(
             padding: EdgeInsets.zero,
@@ -449,6 +406,42 @@ class _GameScreenState extends State<GameScreen> {
         ),
       ],
     );
+  }
+
+  void buildScorecardSetState(int cardNumber) {
+    return setState(() {
+      ScorecardLogic.getScore(cardNumber);
+      ScorecardLogic.updateBonus();
+      ScorecardLogic.updateTotals();
+      if (ZombieLogic.tooManyZombies()) {
+        Navigator.pushNamedAndRemoveUntil(context, '/zombie', (route) => false);
+      }
+      if (ScorecardLogic.isGameOver()) {
+        if (HighScoreLogic.isHighScore(ScorecardLogic.getGrandTotal())) {
+          HighScoreLogic.addHighScore();
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/new_high_score', (route) => false);
+        } else {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/game_over', (route) => false);
+        }
+      }
+      scorecardImages[cardNumber] =
+          ScorecardLogic.getScorecardImage(cardNumber);
+      scorecardValues[cardNumber] =
+          ScorecardLogic.getScorecardValue(cardNumber);
+      scorecardValueColors[cardNumber] =
+          ScorecardLogic.getScorecardValueColor(cardNumber);
+      scorecardImages[6] = ScorecardLogic.getScorecardImage(6);
+      scorecardValues[6] = ScorecardLogic.getScorecardValue(6);
+      scorecardValueColors[6] = ScorecardLogic.getScorecardValueColor(6);
+      zombieCountImage = ZombieLogic.getZombieCountImage();
+      grandTotal = ScorecardLogic.getGrandTotal();
+      upperTotal = ScorecardLogic.getUpperTotal();
+      DiceLogic.resetDice();
+      diceImages = List.from(DiceLogic.getDiceImages());
+      rollCountImage = DiceLogic.getRollCountImage();
+    });
   }
 
   TextButton buildUndoTextButton(int undoNumber) {

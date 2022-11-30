@@ -145,4 +145,22 @@ class ScorecardLogic {
       }
     }
   }
+
+  static isGameOver() {
+    int count = 0;
+
+    for (int i = 0; i < 6; i++) {
+      if (CurrentState.scorecardStatus[i] == ScorecardStatus.incomplete) {
+        count++;
+      }
+    }
+
+    for (int i = 7; i < 14; i++) {
+      if (CurrentState.scorecardStatus[i] == ScorecardStatus.incomplete) {
+        count++;
+      }
+    }
+
+    return count == 0 ? true : false;
+  }
 }

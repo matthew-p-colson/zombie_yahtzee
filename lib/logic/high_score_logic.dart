@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zombie_yahtzee/models/game_state.dart';
 
 class HighScoreLogic {
   static late SharedPreferences prefs;
@@ -31,9 +32,9 @@ class HighScoreLogic {
     }
   }
 
-  static addHighScore(int score) {
+  static addHighScore() {
     List<int> scores = getScores();
-    scores.add(score);
+    scores.add(CurrentState.grandTotal);
     scores.sort();
     scores = scores.reversed.toList();
     scores.removeLast();

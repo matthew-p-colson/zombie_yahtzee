@@ -9,6 +9,7 @@ import 'package:zombie_yahtzee/logic/zombie_logic.dart';
 import 'package:zombie_yahtzee/models/game_state.dart';
 import 'package:zombie_yahtzee/screens/game_screen.dart';
 import 'package:zombie_yahtzee/screens/high_score_screen.dart';
+import 'package:zombie_yahtzee/screens/new_high_score_screen.dart';
 import 'package:zombie_yahtzee/screens/start_screen.dart';
 import 'package:zombie_yahtzee/screens/zombie_screen.dart';
 
@@ -33,12 +34,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Zombie Yahtzee',
-      initialRoute: '/game',
+      initialRoute: '/',
       routes: {
         '/': (context) => const StartScreen(),
         '/high_score': (context) => const HighScoreScreen(),
         '/game': (context) => const GameScreen(),
         '/zombie': (context) => const ZombieScreen(),
+        '/new_high_score': (context) => const NewHighScoreScreen(),
       },
     );
   }
