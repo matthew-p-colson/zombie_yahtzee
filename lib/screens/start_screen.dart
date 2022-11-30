@@ -33,6 +33,8 @@ class _StartScreenState extends State<StartScreen> {
               onSelected: (value) {
                 switch (value) {
                   case 0:
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, "/game", (r) => false);
                     break;
                   case 1:
                     Navigator.pushNamed(context, '/high_score');
@@ -128,7 +130,10 @@ class _StartScreenState extends State<StartScreen> {
               child: Column(
                 children: [
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, "/game", (r) => false);
+                    },
                     child: LetterLogic.getLetters(
                         letters: 'New Game',
                         letterColor: LetterColor.green,

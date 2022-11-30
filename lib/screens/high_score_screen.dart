@@ -35,6 +35,7 @@ class _HighScoreScreenState extends State<HighScoreScreen> {
               onSelected: (value) {
                 switch (value) {
                   case 0:
+                    Navigator.pushNamed(context, '/game');
                     break;
                   case 1:
                     Navigator.pop(context);
