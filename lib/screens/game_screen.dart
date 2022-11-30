@@ -5,7 +5,6 @@ import 'package:zombie_yahtzee/logic/letter_logic.dart';
 import 'package:zombie_yahtzee/logic/number_logic.dart';
 import 'package:zombie_yahtzee/logic/scorecard_logic.dart';
 import 'package:zombie_yahtzee/logic/screen_size_logic.dart';
-import 'package:zombie_yahtzee/logic/state_logic.dart';
 import 'package:zombie_yahtzee/logic/undo_logic.dart';
 import 'package:zombie_yahtzee/logic/zombie_logic.dart';
 import 'package:zombie_yahtzee/screens/style.dart';
@@ -25,6 +24,8 @@ class _GameScreenState extends State<GameScreen> {
   int lowerTotal = ScorecardLogic.getLowerTotal();
   List<String> scorecardImages = List.from(ScorecardLogic.getScorecardImages());
   List<int> scorecardValues = List.from(ScorecardLogic.getScorecardValues());
+  List<NumberColor> scorecardValueColors =
+      List.from(ScorecardLogic.getScorecardValueColors());
   String zombieCountImage = ZombieLogic.getZombieCountImage();
 
   @override
@@ -311,6 +312,10 @@ class _GameScreenState extends State<GameScreen> {
                         onPressed: () {
                           setState(() {
                             if (DiceLogic.rollDice()) {
+                              if (ZombieLogic.tooManyZombies()) {
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, '/zombie', (route) => false);
+                              }
                               rollCountImage = DiceLogic.getRollCountImage();
                               diceImages = List.from(DiceLogic.getDiceImages());
                               zombieCountImage =
@@ -350,15 +355,25 @@ class _GameScreenState extends State<GameScreen> {
           onPressed: () {
             setState(() {
               ScorecardLogic.getScore(cardNumber);
+              ScorecardLogic.updateBonus();
+              if (ZombieLogic.tooManyZombies()) {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/zombie', (route) => false);
+              }
               scorecardImages[cardNumber] =
                   ScorecardLogic.getScorecardImage(cardNumber);
               scorecardValues[cardNumber] =
                   ScorecardLogic.getScorecardValue(cardNumber);
+              scorecardValueColors[cardNumber] =
+                  ScorecardLogic.getScorecardValueColor(cardNumber);
+              scorecardImages[6] = ScorecardLogic.getScorecardImage(6);
+              scorecardValues[6] = ScorecardLogic.getScorecardValue(6);
+              scorecardValueColors[6] =
+                  ScorecardLogic.getScorecardValueColor(6);
               ScorecardLogic.updateTotals();
               zombieCountImage = ZombieLogic.getZombieCountImage();
               grandTotal = ScorecardLogic.getGrandTotal();
               upperTotal = ScorecardLogic.getUpperTotal();
-              StateLogic.currentToPast();
               DiceLogic.resetDice();
               diceImages = List.from(DiceLogic.getDiceImages());
               rollCountImage = DiceLogic.getRollCountImage();
@@ -378,7 +393,7 @@ class _GameScreenState extends State<GameScreen> {
         ),
         NumberLogic.getNumbers(
           numbers: scorecardValues[cardNumber],
-          numberColor: NumberColor.tan,
+          numberColor: scorecardValueColors[cardNumber],
           numberHeight: ScreenSizeLogic.blockSizeVertical * 3,
           numberSpacing: ScreenSizeLogic.blockSizeVertical,
         ),
@@ -392,7 +407,7 @@ class _GameScreenState extends State<GameScreen> {
       children: [
         NumberLogic.getNumbers(
           numbers: scorecardValues[cardNumber],
-          numberColor: NumberColor.tan,
+          numberColor: scorecardValueColors[cardNumber],
           numberHeight: ScreenSizeLogic.blockSizeVertical * 3,
           numberSpacing: ScreenSizeLogic.blockSizeVertical,
         ),
@@ -403,15 +418,21 @@ class _GameScreenState extends State<GameScreen> {
           onPressed: () {
             setState(() {
               ScorecardLogic.getScore(cardNumber);
+              ScorecardLogic.updateBonus();
+              if (ZombieLogic.tooManyZombies()) {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/zombie', (route) => false);
+              }
               scorecardImages[cardNumber] =
                   ScorecardLogic.getScorecardImage(cardNumber);
               scorecardValues[cardNumber] =
                   ScorecardLogic.getScorecardValue(cardNumber);
+              scorecardValueColors[cardNumber] =
+                  ScorecardLogic.getScorecardValueColor(cardNumber);
               ScorecardLogic.updateTotals();
               zombieCountImage = ZombieLogic.getZombieCountImage();
               grandTotal = ScorecardLogic.getGrandTotal();
               lowerTotal = ScorecardLogic.getLowerTotal();
-              StateLogic.currentToPast();
               DiceLogic.resetDice();
               diceImages = List.from(DiceLogic.getDiceImages());
               rollCountImage = DiceLogic.getRollCountImage();
@@ -441,6 +462,14 @@ class _GameScreenState extends State<GameScreen> {
           UndoLogic.useUndo(undoNumber);
           diceImages = List.from(DiceLogic.getDiceImages());
           rollCountImage = DiceLogic.getRollCountImage();
+          scorecardImages = List.from(ScorecardLogic.getScorecardImages());
+          scorecardValues = List.from(ScorecardLogic.getScorecardValues());
+          scorecardValueColors =
+              List.from(ScorecardLogic.getScorecardValueColors());
+          zombieCountImage = ZombieLogic.getZombieCountImage();
+          grandTotal = ScorecardLogic.getGrandTotal();
+          upperTotal = ScorecardLogic.getUpperTotal();
+          lowerTotal = ScorecardLogic.getLowerTotal();
         });
       },
       child: Image.asset(

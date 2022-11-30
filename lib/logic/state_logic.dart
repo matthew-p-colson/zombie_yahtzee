@@ -19,7 +19,6 @@ class StateLogic {
 
   static pastToCurrent() {
     Map past = PastState.past.removeLast();
-
     CurrentState.rollCount = past['rollCount'];
     CurrentState.diceValues = List.from(past['diceValues']);
     CurrentState.diceStatus = List.from(past['diceStatus']);

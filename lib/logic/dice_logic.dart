@@ -66,7 +66,12 @@ class DiceLogic {
       for (int i = 0; i < CurrentState.diceValues.length; i++) {
         if (CurrentState.diceStatus[i] == DiceStatus.initial ||
             CurrentState.diceStatus[i] == DiceStatus.unselected) {
-          CurrentState.diceValues[i] = Random().nextInt(8);
+          int weighted = Random().nextInt(100);
+          if (weighted < 20) {
+            CurrentState.diceValues[i] = Random().nextInt(8);
+          } else {
+            CurrentState.diceValues[i] = Random().nextInt(6) + 1;
+          }
           if (CurrentState.diceValues[i] == 0) {
             CurrentState.diceStatus[i] = DiceStatus.zombie;
             ZombieLogic.addZombie();

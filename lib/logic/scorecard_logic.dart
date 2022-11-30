@@ -1,4 +1,6 @@
+import 'package:zombie_yahtzee/logic/number_logic.dart';
 import 'package:zombie_yahtzee/logic/scoring_logic.dart';
+import 'package:zombie_yahtzee/logic/state_logic.dart';
 import 'package:zombie_yahtzee/logic/zombie_logic.dart';
 import 'package:zombie_yahtzee/models/game_state.dart';
 
@@ -33,7 +35,6 @@ class ScorecardLogic {
           unComplete++;
         }
       }
-
       if (total >= 63) {
         CurrentState.scorecardStatus[6] = ScorecardStatus.complete;
         CurrentState.scorecardValues[6] = 35;
@@ -74,7 +75,6 @@ class ScorecardLogic {
   }
 
   static updateTotals() {
-    updateBonus();
     updateUpperTotal();
     updateLowerTotal();
     updateGrandTotal();
@@ -105,11 +105,34 @@ class ScorecardLogic {
     return CurrentState.scorecardValues[scorecardNumber];
   }
 
+  static getScorecardValueColor(int cardNumber) {
+    if (CurrentState.scorecardStatus[cardNumber] ==
+        ScorecardStatus.incomplete) {
+      return NumberColor.tan;
+    } else if (CurrentState.scorecardStatus[cardNumber] ==
+        ScorecardStatus.complete) {
+      return NumberColor.green;
+    } else {
+      return NumberColor.red;
+    }
+  }
+
+  static getScorecardValueColors() {
+    List<NumberColor> currentScorecardValueColors = [];
+
+    for (int i = 0; i < CurrentState.scorecardStatus.length; i++) {
+      currentScorecardValueColors.add(getScorecardValueColor(i));
+    }
+
+    return currentScorecardValueColors;
+  }
+
   static getScore(int cardNumber) {
     if (cardNumber != 6) {
       if (CurrentState.scorecardStatus[cardNumber] ==
           ScorecardStatus.incomplete) {
         if (CurrentState.rollCount > 0) {
+          StateLogic.currentToPast();
           int score = Scoring.getScore(cardNumber, CurrentState.diceValues);
           if (score == 0) {
             CurrentState.scorecardStatus[cardNumber] = ScorecardStatus.pass;

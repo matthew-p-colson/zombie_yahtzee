@@ -13,6 +13,10 @@ class ZombieLogic {
     return zombieCountImages[CurrentState.zombieCount];
   }
 
+  static tooManyZombies() {
+    return CurrentState.zombieCount >= 10 ? true : false;
+  }
+
   static addZombie() {
     CurrentState.zombieCount++;
   }
