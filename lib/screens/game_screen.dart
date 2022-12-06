@@ -191,6 +191,7 @@ class _GameScreenState extends State<GameScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       buildLeftCardRow(0),
@@ -229,11 +230,12 @@ class _GameScreenState extends State<GameScreen> {
                     children: [
                       Image.asset(
                         zombieCountImage,
-                        width: ScreenSizeLogic.blockSizeVertical * 4.5,
+                        width: ScreenSizeLogic.blockSizeVertical * 4,
                       ),
                     ],
                   ),
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       buildRightCardRow(7),

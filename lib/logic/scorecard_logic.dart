@@ -142,6 +142,12 @@ class ScorecardLogic {
             CurrentState.scorecardValues[cardNumber] = score;
           }
         }
+      } else if (cardNumber == 12) {
+        if (CurrentState.scorecardStatus[cardNumber] ==
+            ScorecardStatus.complete) {
+          CurrentState.scorecardValues[cardNumber] =
+              Scoring.yahtzee(CurrentState.diceValues);
+        }
       }
     }
   }

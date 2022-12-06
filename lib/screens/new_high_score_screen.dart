@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:zombie_yahtzee/logic/high_score_logic.dart';
 import 'package:zombie_yahtzee/logic/letter_logic.dart';
 import 'package:zombie_yahtzee/logic/number_logic.dart';
-import 'package:zombie_yahtzee/logic/scorecard_logic.dart';
 import 'package:zombie_yahtzee/logic/screen_size_logic.dart';
 import 'package:zombie_yahtzee/logic/state_logic.dart';
 import 'package:zombie_yahtzee/screens/style.dart';
